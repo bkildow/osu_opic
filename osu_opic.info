@@ -1,0 +1,10 @@
+name = Opic Field
+description = Adds Opic integration
+core = 7.x
+package = OSU Fields
+version = 7.x-1.0
+project = osu_opic
+dependencies[] = features
+dependencies[] = image
+features[features_api][] = api:2
+features[field_base][] = field_osu_opic

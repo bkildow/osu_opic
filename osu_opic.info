@@ -8,3 +8,5 @@ dependencies[] = features
 dependencies[] = image
 features[features_api][] = api:2
 features[field_base][] = field_osu_opic
+files[] = includes/opic_data.inc
+files[] = plugins/opic/abstract.inc

@@ -70,7 +70,7 @@ class OsuOpicPluginWrangler {
    *   the name of the field providing a name.#
    */
   private function getNameDotNumberFieldNameFromFieldInfo($field_info, $plugin_id) {
-    if (empty($plugin_id)) {
+    if (empty($plugin_id) || $plugin_id == 'none') {
       return '';
     }
 

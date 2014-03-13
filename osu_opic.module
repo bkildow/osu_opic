@@ -29,14 +29,15 @@ function osu_opic_ctools_plugin_directory($owner, $plugin_type) {
 function osu_opic_entity_presave($entity, $entity_type) {
 
   if (isset($entity->field_osu_opic)) {
-    // get name.# from another field
-    // If no picture is set, fetch opic picture
 
     $opic = new OsuOpicData();
     $name_n = $opic->getNameDotNumber($entity_type, $entity, OSU_OPIC_IMAGE_FIELD);
 
-    $file = $opic->getImage($name_n);
-    $entity->{OSU_OPIC_IMAGE_FIELD} = array(LANGUAGE_NONE => array('0' => (array) $file));
+    // Make sure we have a valid name.#
+    if (!empty($name_n)) {
+      $file = $opic->getImage($name_n);
+      $entity->{OSU_OPIC_IMAGE_FIELD} = array(LANGUAGE_NONE => array('0' => (array) $file));
+    }
   }
 }
 

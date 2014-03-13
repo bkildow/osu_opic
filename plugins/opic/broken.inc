@@ -5,7 +5,7 @@
  * This is used if a opic plugin class is not found.
  */
 
-class OsuOpic_Broken implements OsuOpic_NameNumProviderAbstract {
+class OsuOpicBroken implements OsuOpicNameNumProviderAbstract {
 
   public function __construct($plugin_name) {
   }

@@ -1,6 +1,6 @@
 <?php
 
-class OsuOpic_Data extends OsuOpic_PluginWrangler{
+class OsuOpicData extends OsuOpicPluginWrangler{
 
   private $base_url = 'https://opic.osu.edu';
 

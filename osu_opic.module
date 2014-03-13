@@ -32,7 +32,7 @@ function osu_opic_entity_presave($entity, $entity_type) {
     // get name.# from another field
     // If no picture is set, fetch opic picture
 
-    $opic = new OsuOpic_Data();
+    $opic = new OsuOpicData();
     $name_n = $opic->getNameDotNumber($entity_type, $entity, OSU_OPIC_IMAGE_FIELD);
 
 //    $file = $opic->getImage('kildow.5');
@@ -48,7 +48,7 @@ function osu_opic_form_field_ui_field_edit_form_alter(&$form, $form_state) {
 
   if ($form['#instance']['field_name'] == OSU_OPIC_IMAGE_FIELD) {
 
-    $field_helper = new OsuOpic_FieldSettings();
+    $field_helper = new OsuOpicFieldSettings();
     $settings =& $form['instance']['settings'];
 
     $settings['opic'] = array(
@@ -89,7 +89,7 @@ function osu_opic_get_plugin_object($plugin_id) {
     $class = ctools_plugin_load_class('osu_opic', 'opic', $plugin_id, 'class');
 
     // If the class can't be found, return an empty plugin object.
-    $class = class_exists($class) ? $class : 'OsuOpic_Broken';
+    $class = class_exists($class) ? $class : 'OsuOpicBroken';
     $object_cache[$plugin_id] = new $class($plugin_id);
   }
 

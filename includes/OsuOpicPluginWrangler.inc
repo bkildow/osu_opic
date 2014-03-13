@@ -1,6 +1,6 @@
 <?php
 
-class OsuOpic_PluginWrangler {
+class OsuOpicPluginWrangler {
   function __construct() {
     ctools_include('plugins');
   }

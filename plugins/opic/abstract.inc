@@ -1,6 +1,6 @@
 <?php
 
-interface OsuOpic_NameNumProviderAbstract {
+interface OsuOpicNameNumProviderAbstract {
   /**
    * Constructor for the plugin.
    *

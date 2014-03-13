@@ -1,6 +1,6 @@
 <?php
 
-class OsuOpic_Textfield implements OsuOpic_NameNumProviderAbstract {
+class OsuOpicTextfield implements OsuOpicNameNumProviderAbstract {
 
   protected $name;
 

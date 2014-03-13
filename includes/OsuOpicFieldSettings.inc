@@ -1,6 +1,6 @@
 <?php
 
-class OsuOpic_FieldSettings extends OsuOpic_PluginWrangler {
+class OsuOpicFieldSettings extends OsuOpicPluginWrangler {
 
   /**
    * Generates a form options array for each opic plugin.

@@ -35,9 +35,8 @@ function osu_opic_entity_presave($entity, $entity_type) {
     $opic = new OsuOpicData();
     $name_n = $opic->getNameDotNumber($entity_type, $entity, OSU_OPIC_IMAGE_FIELD);
 
-//    $file = $opic->getImage('kildow.5');
-//
-//    $entity->{OSU_OPIC_IMAGE_FIELD} = array(LANGUAGE_NONE => array('0' => (array) $file));
+    $file = $opic->getImage($name_n);
+    $entity->{OSU_OPIC_IMAGE_FIELD} = array(LANGUAGE_NONE => array('0' => (array) $file));
   }
 }
 

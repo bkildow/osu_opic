@@ -1,18 +1,25 @@
 <?php
+/**
+ * @file
+ * Provides an interface that all opic CTools plugins must implement.
+ */
 
-interface OsuOpicNameNumProviderAbstract {
+/**
+ * Interface OsuOpicNameNumProviderInterface
+ */
+interface OsuOpicNameNumProviderInterface {
   /**
    * Constructor for the plugin.
    *
-   * @param $plugin_name
+   * @param string $plugin_name
    *   the name of the plugin
    */
   public function __construct($plugin_name);
 
   /**
-   * Returns an array of field instance names that this plugin knows how to
-   * handle.
+   * Returns an array of field instance names.
    *
+   * These will be field instance names that this plugin knows how to handle.
    * E.g. array('field_osu_opic', 'field_osu_body')
    *
    * @return array
@@ -21,6 +28,8 @@ interface OsuOpicNameNumProviderAbstract {
   public function getFieldNames();
 
   /**
+   * Given an entity type, entity, and field name gets a name.#.
+   *
    * @param string $entity_type
    *   the drupal entity type
    * @param StdClass $entity

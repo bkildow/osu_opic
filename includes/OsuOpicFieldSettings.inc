@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Provides functionality for field settings.
+ */
+
 class OsuOpicFieldSettings extends OsuOpicPluginWrangler {
 
   /**
@@ -8,7 +13,7 @@ class OsuOpicFieldSettings extends OsuOpicPluginWrangler {
    * @return array
    *   form options array
    */
-  function getPluginOptions() {
+  public function getPluginOptions() {
     // Get all available opic plugins.
     $plugins = $this->getPlugins();
 
@@ -30,7 +35,7 @@ class OsuOpicFieldSettings extends OsuOpicPluginWrangler {
    * @return array
    *   drupal form array
    */
-  function generateFieldSettings(&$form_state) {
+  public function generateFieldSettings(&$form_state) {
     $plugins = $this->getPlugins();
     $settings = array();
 
@@ -41,7 +46,7 @@ class OsuOpicFieldSettings extends OsuOpicPluginWrangler {
         '#default_value' => $this->getPluginFieldDefaultValue($form_state, $id),
         '#options' => $this->getFieldOptions($id),
         '#states' => array(
-          // Only show if this plugin was selected
+          // Only show if this plugin was selected.
           'visible' => array(
             ':input[name="instance[settings][opic][osu_opic_plugin]"]' => array(
               'value' => $id,
@@ -55,7 +60,7 @@ class OsuOpicFieldSettings extends OsuOpicPluginWrangler {
   }
 
   /**
-   * Gets a default value for the opic plugin field settings
+   * Gets a default value for the opic plugin field settings.
    *
    * @param array $form_state
    *   form_state array
@@ -65,9 +70,9 @@ class OsuOpicFieldSettings extends OsuOpicPluginWrangler {
    * @return string
    *   default value
    */
-  function getPluginFieldDefaultValue(&$form_state, $plugin_id) {
+  public function getPluginFieldDefaultValue(&$form_state, $plugin_id) {
     $settings =& $form_state['build_info']['args']['0']['settings'];
-    if(isset($settings['opic'][$plugin_id])) {
+    if (isset($settings['opic'][$plugin_id])) {
       return $settings['opic'][$plugin_id];
     }
     else {
@@ -76,7 +81,7 @@ class OsuOpicFieldSettings extends OsuOpicPluginWrangler {
   }
 
   /**
-   * Gets a default value for the opic plugin selected
+   * Gets a default value for the opic plugin selected.
    *
    * @param array $form_state
    *   form_state array
@@ -84,9 +89,9 @@ class OsuOpicFieldSettings extends OsuOpicPluginWrangler {
    * @return string
    *   default value
    */
-  function getPluginDefaultValue(&$form_state) {
+  public function getPluginDefaultValue(&$form_state) {
     $settings =& $form_state['build_info']['args']['0']['settings'];
-    if(isset($settings['opic']['osu_opic_plugin'])) {
+    if (isset($settings['opic']['osu_opic_plugin'])) {
       return $settings['opic']['osu_opic_plugin'];
     }
     else {
@@ -103,7 +108,7 @@ class OsuOpicFieldSettings extends OsuOpicPluginWrangler {
    * @return array
    *   Drupal form options array
    */
-  private function getFieldOptions($plugin_id) {
+  protected function getFieldOptions($plugin_id) {
     $plugin = $this->getPluginInstance($plugin_id);
     return drupal_map_assoc($plugin->getFieldNames());
   }

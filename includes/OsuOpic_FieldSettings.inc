@@ -95,24 +95,6 @@ class OsuOpic_FieldSettings extends OsuOpic_PluginWrangler {
   }
 
   /**
-   * Gets a name.# from the selected opic plugin
-   *
-   * @param string $entity_type
-   *   entity type
-   * @param StdClass $entity
-   *   entity object
-   * @param string $image_field
-   *   field name of the image field that the plugin is configured on
-   *
-   * @return string
-   *   a name.#
-   */
-  function getNameDotNumber($entity_type, $entity, $image_field) {
-    $info = field_info_instance($entity_type, $image_field, $entity->type);
-    return $this->getNameDotNumberFromPlugin($entity, $info);
-  }
-
-  /**
    * Gets form options per opic plugin.
    *
    * @param string $plugin_id

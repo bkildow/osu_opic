@@ -14,7 +14,7 @@ class OsuOpic_Broken implements OsuOpic_NameNumProviderAbstract {
     return array();
   }
 
-  public function getNameDotNumber($entity, $field_name) {
+  public function getNameDotNumber($entity_type, $entity, $field_name) {
     return '__PLUGIN_ERROR__';
   }
 }

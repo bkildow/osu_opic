@@ -21,6 +21,8 @@ interface OsuOpic_NameNumProviderAbstract {
   public function getFieldNames();
 
   /**
+   * @param string $entity_type
+   *   the drupal entity type
    * @param StdClass $entity
    *   a drupal entity object
    * @param string $field_name
@@ -29,5 +31,5 @@ interface OsuOpic_NameNumProviderAbstract {
    * @return string
    *   a name.# string. E.g. kildow.5
    */
-  public function getNameDotNumber($entity, $field_name);
+  public function getNameDotNumber($entity_type, $entity, $field_name);
 }

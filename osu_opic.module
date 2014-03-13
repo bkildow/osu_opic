@@ -33,8 +33,7 @@ function osu_opic_entity_presave($entity, $entity_type) {
     // If no picture is set, fetch opic picture
 
     $opic = new OsuOpic_Data();
-    $settings = new OsuOpic_FieldSettings();
-    $settings->getNameDotNumber($entity_type, $entity, OSU_OPIC_IMAGE_FIELD);
+    $name_n = $opic->getNameDotNumber($entity_type, $entity, OSU_OPIC_IMAGE_FIELD);
 
 //    $file = $opic->getImage('kildow.5');
 //

@@ -16,7 +16,6 @@ class OsuOpic_Textfield implements OsuOpic_NameNumProviderAbstract {
   function getNameDotNumber($entity, $field_name) {
     $items = field_get_items($entity->type, $entity, $field_name);
     $field_value = field_view_value($entity->type, $entity, $field_name, $items[0], array());
-    dpm($field_value);
     return '';
   }
 }

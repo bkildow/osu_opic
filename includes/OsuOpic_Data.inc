@@ -1,6 +1,6 @@
 <?php
 
-class OpicData {
+class OsuOpic_Data {
 
   private $base_url = 'https://opic.osu.edu';
 

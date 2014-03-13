@@ -3,112 +3,6 @@
 define('OSU_OPIC_IMAGE_FIELD', 'field_osu_opic');
 
 /**
- * Implements hook_entity_presave().
- */
-function osu_opic_entity_presave($entity, $entity_type) {
-
-  if (isset($entity->field_osu_opic)) {
-    // get name.# from another field
-    // If no picture is set, fetch opic picture
-
-    $opic = new OpicData();
-    $file = $opic->getImage('kildow.5');
-
-    $entity->{OSU_OPIC_IMAGE_FIELD} = array(LANGUAGE_NONE => array('0' => (array) $file));
-
-    dpm($entity);
-  }
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function osu_opic_form_field_ui_field_edit_form_alter(&$form, $form_state) {
-
-  if ($form['#instance']['field_name'] == OSU_OPIC_IMAGE_FIELD) {
-
-    $settings =& $form['instance']['settings'];
-
-    $settings['opic'] = array(
-      '#type' => 'fieldset',
-      '#title' => 'Opic Settings',
-      '#weight' => 100,
-    );
-
-    $settings['opic']['osu_opic_plugin'] = array(
-      '#type' => 'select',
-      '#title' => 'Opic Field Plugin',
-      '#options' => osu_opic_get_plugin_options(),
-    );
-
-    $settings['opic'] += osu_opic_generate_field_settings();
-
-  }
-}
-
-function osu_opic_generate_field_settings() {
-  ctools_include('plugins');
-  $plugins = ctools_get_plugins('osu_opic', 'opic');
-  $settings = array();
-
-  foreach ($plugins as $id => $plugin) {
-    $settings[$id] = array(
-      '#type' => 'select',
-      '#title' => 'Field that provides a name.#',
-      '#options' => osu_opic_get_field_options($id),
-      '#states' => array(
-        // Only show if this plugin was selected
-        'visible' => array(
-          ':input[name="instance[settings][opic][osu_opic_plugin]"]' => array(
-            'value' => $id,
-          ),
-        ),
-      ),
-    );
-  }
-
-  return $settings;
-}
-
-function osu_opic_get_field_options($plugin_id) {
-
-  /**
-   * @var $plugin OsuOpic_NameNumProviderAbstract
-   */
-  $plugin = osu_opic_get_plugin_object($plugin_id);
-  return drupal_map_assoc($plugin->getFieldNames());
-}
-
-function osu_opic_get_plugin_object($plugin_id) {
-  $object_cache = drupal_static(__FUNCTION__);
-
-  if (!isset($object_cache[$plugin_id])) {
-    ctools_include('plugins');
-    $class = ctools_plugin_load_class('osu_opic', 'opic', $plugin_id, 'class');
-
-    // TODO: add a broken class plugin.
-    $class = class_exists($class) ? $class : 'broken';
-    $object_cache[$plugin_id] = new $class($plugin_id);
-  }
-
-  return $object_cache[$plugin_id];
-}
-
-function osu_opic_get_plugin_options() {
-  // Get all available opic plugins.
-  ctools_include('plugins');
-  $plugins = ctools_get_plugins('osu_opic', 'opic');
-
-  $options = array('none' => 'None');
-
-  foreach ($plugins as $id => $plugin) {
-    $options[$id] = $plugin['title'];
-  }
-
-  return $options;
-}
-
-/**
  * Implements hook_ctools_plugin_type().
  *
  * See ctools/help/plugins-creating.html
@@ -127,4 +21,78 @@ function osu_opic_ctools_plugin_directory($owner, $plugin_type) {
   if ($owner == 'osu_opic') {
     return "plugins/$plugin_type";
   }
+}
+
+/**
+ * Implements hook_entity_presave().
+ */
+function osu_opic_entity_presave($entity, $entity_type) {
+
+  if (isset($entity->field_osu_opic)) {
+    // get name.# from another field
+    // If no picture is set, fetch opic picture
+
+    $opic = new OsuOpic_Data();
+    $settings = new OsuOpic_FieldSettings();
+    $settings->getNameDotNumber($entity_type, $entity, OSU_OPIC_IMAGE_FIELD);
+
+//    $file = $opic->getImage('kildow.5');
+//
+//    $entity->{OSU_OPIC_IMAGE_FIELD} = array(LANGUAGE_NONE => array('0' => (array) $file));
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function osu_opic_form_field_ui_field_edit_form_alter(&$form, $form_state) {
+
+  if ($form['#instance']['field_name'] == OSU_OPIC_IMAGE_FIELD) {
+
+    $field_helper = new OsuOpic_FieldSettings();
+    $settings =& $form['instance']['settings'];
+
+    $settings['opic'] = array(
+      '#type' => 'fieldset',
+      '#title' => 'Opic Settings',
+      '#weight' => 100,
+    );
+
+    $settings['opic']['osu_opic_plugin'] = array(
+      '#type' => 'select',
+      '#title' => 'Opic Field Plugin',
+      '#default_value' => $field_helper->getPluginDefaultValue($form_state),
+      '#options' => $field_helper->getPluginOptions(),
+    );
+
+    $settings['opic'] += $field_helper->generateFieldSettings($form_state);
+
+  }
+}
+
+/**
+ * Gets a plugin object from a plugin id.
+ *
+ * This static caches the object so you can freely call this more than
+ * once per request without much overhead.
+ *
+ * @param string $plugin_id
+ *   the plugin id
+ *
+ * @return StdClass
+ *   the plugin object
+ */
+function osu_opic_get_plugin_object($plugin_id) {
+  $object_cache = drupal_static(__FUNCTION__);
+
+  if (!isset($object_cache[$plugin_id])) {
+    ctools_include('plugins');
+    $class = ctools_plugin_load_class('osu_opic', 'opic', $plugin_id, 'class');
+
+    // If the class can't be found, return an empty plugin object.
+    $class = class_exists($class) ? $class : 'OsuOpic_Broken';
+    $object_cache[$plugin_id] = new $class($plugin_id);
+  }
+
+  return $object_cache[$plugin_id];
 }

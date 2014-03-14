@@ -64,8 +64,8 @@ class OsuOpicSaver extends OsuOpicPluginWrangler {
     $client = new OsuOpicClient($this->name_n);
     $response = $client->get();
 
-    if ($response) {
-      return file_save_data($response->data, 'public://opic/' . $filename, FILE_EXISTS_REPLACE);
+    if ($response == 200) {
+      return file_save_data($client->data, 'public://opic/' . $filename, FILE_EXISTS_REPLACE);
     }
     else {
       return false;

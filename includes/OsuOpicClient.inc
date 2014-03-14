@@ -23,8 +23,8 @@ class OsuOpicClient {
    * have no image or there is no such name.n, this will return 302.
    * If there is a 200 response, the image can be found at $this->data.
    *
-   * @return bool
-   *   returns true upon success or false otherwise
+   * @return integer
+   *   http response code
    */
   public function get() {
     $this->resetRequestData();
@@ -35,13 +35,13 @@ class OsuOpicClient {
     // If we were redirected, it means the person doesn't have a pic.
     if(!empty($response->redirect_code)) {
       $this->code = $response->redirect_code;
-      return false;
     }
     else {
       $this->code = $response->code;
       $this->data = $response->data;
-      return true;
     }
+
+    return $this->code;
   }
 
   public function post() {

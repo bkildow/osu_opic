@@ -85,20 +85,16 @@ class OsuOpicStateManager {
    */
   public function imagePullNeeded() {
 
-    if ($this->fileState == OsuOpicFileState::IMAGE_NOT_CHANGED && $this->opicState == OsuOpicOpicState::OPIC_NULL) {
+    // Figure out if this is needed, by seeing if the others are not.
+    $push = $this->imagePushNeeded();
+    $local = $this->imageLocalNeeded();
+
+    if (!$push && !$local) {
       return TRUE;
     }
-    if ($this->opicState == OsuOpicOpicState::OPIC_SYNCED) {
-      if ($this->fileState == OsuOpicFileState::IMAGE_NOT_CHANGED || $this->fileState == OsuOpicFileState::IMAGE_DELETED) {
-        return TRUE;
-      }
+    else {
+      return FALSE;
     }
-
-    if ($this->fileState == OsuOpicFileState::IMAGE_DELETED && $this->opicState == OsuOpicOpicState::OPIC_LOCAL) {
-      return TRUE;
-    }
-
-    return FALSE;
   }
 
   /**

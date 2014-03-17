@@ -1,0 +1,42 @@
+<?php
+/**
+ * @file
+ * Module install file.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function osu_opic_schema() {
+  $schema['osu_opic_states'] = array(
+    'description' => 'Stores states for osu opic image fields.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'The primary identifier for a state.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'entity_type' => array(
+        'type' => 'varchar',
+        'length' => 64,
+        'description' => 'The entity type.',
+        'not null' => TRUE,
+      ),
+      'eid' => array(
+        'type' => 'int',
+        'description' => 'The entity id.',
+        'not null' => TRUE,
+      ),
+      'state' => array(
+        'type' => 'int',
+        'description' => 'The state of the image field.',
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('id'),
+    'indexes' => array('id' => array('id')),
+  );
+
+  return $schema;
+}

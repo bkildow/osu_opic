@@ -13,6 +13,7 @@ files[] = includes/OsuOpicPluginWrangler.inc
 files[] = includes/OsuOpicSaver.inc
 files[] = includes/OsuOpicClient.inc
 files[] = includes/OsuOpicFileState.inc
+files[] = includes/OsuOpicOpicState.inc
 files[] = includes/OsuOpicFieldSettings.inc
 files[] = plugins/opic/abstract.inc
 files[] = plugins/opic/broken.inc

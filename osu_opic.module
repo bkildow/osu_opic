@@ -29,8 +29,17 @@ function osu_opic_ctools_plugin_directory($owner, $plugin_type) {
 function osu_opic_entity_presave($entity, $entity_type) {
 
   if (isset($entity->{OSU_OPIC_IMAGE_FIELD})) {
-    $opic = new OsuOpicSaver($entity_type, $entity, OSU_OPIC_IMAGE_FIELD);
-    $file_array = $opic->saveImage();
+    $opicSaver = new OsuOpicSaver($entity_type, $entity, OSU_OPIC_IMAGE_FIELD);
+    $opicClient = new OsuOpicClient($opicSaver->name_n);
+    $response = $opicClient->get();
+
+    if($response !== 200) {
+      return;
+    }
+
+    $fileData = $opicClient->data;
+
+    $file_array = $opicSaver->saveImage($fileData);
     if(!empty($file_array)) {
       $entity->{OSU_OPIC_IMAGE_FIELD} = $file_array;
     }

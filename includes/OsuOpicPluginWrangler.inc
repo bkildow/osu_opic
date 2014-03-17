@@ -33,7 +33,7 @@ class OsuOpicPluginWrangler {
    * @param string $plugin_id
    *   the plugin id
    *
-   * @return OsuOpic_NameNumProviderAbstract
+   * @return OsuOpicNameNumProviderInterface
    *   returns an opic CTools plugin
    */
   public function getPluginInstance($plugin_id) {

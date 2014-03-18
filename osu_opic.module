@@ -28,31 +28,69 @@ function osu_opic_ctools_plugin_directory($owner, $plugin_type) {
  */
 function osu_opic_entity_presave($entity, $entity_type) {
 
-
   if (isset($entity->{OSU_OPIC_IMAGE_FIELD})) {
 
-    $file_state = new OsuOpicFileState($entity_type, $entity, OSU_OPIC_IMAGE_FIELD);
-    $state = $file_state->getState();
+    $manager = new OsuOpicStateManager($entity_type, $entity, OSU_OPIC_IMAGE_FIELD);
 
-    $test = new ReflectionClass('OsuOpicFileState');
-    $const = $test->getConstants();
-    $debug = array_keys($const, $state);
-    dpm($debug[0]);
+    // If opic image pull is needed
+    if ($manager->imagePullNeeded()) {
 
-//    $opicSaver = new OsuOpicSaver($entity_type, $entity, OSU_OPIC_IMAGE_FIELD);
-//    $opicClient = new OsuOpicClient($opicSaver->name_n);
-//    $response = $opicClient->get();
-//
-//    if($response !== 200) {
-//      return;
-//    }
-//
-//    $fileData = $opicClient->data;
-//
-//    $file_array = $opicSaver->saveImage($fileData);
-//    if(!empty($file_array)) {
-//      $entity->{OSU_OPIC_IMAGE_FIELD} = $file_array;
-//    }
+      $opicSaver = new OsuOpicSaver($entity_type, $entity, OSU_OPIC_IMAGE_FIELD);
+      $opicClient = new OsuOpicClient($opicSaver->name_n);
+      $response = $opicClient->get();
+
+      // Short circuit if we don't get a successful response.
+      if ($response !== 200) {
+
+        // Set the opic state to synced to retry in the future.
+        if (!$entity->is_new) {
+          $manager->setOpicState(OsuOpicOpicState::OPIC_SYNCED);
+        }
+
+        return;
+      }
+
+      // Get the bytes of the image.
+      $fileData = $opicClient->data;
+
+      // Generate the correct file array needed for saving.
+      $file_array = $opicSaver->saveImage($fileData);
+      if (!empty($file_array)) {
+
+        // Attach it to the field to save.
+        $entity->{OSU_OPIC_IMAGE_FIELD} = $file_array;
+
+        // Set the opic state.
+        if (!$entity->is_new) {
+          $manager->setOpicState(OsuOpicOpicState::OPIC_SYNCED);
+        }
+      }
+    }
+
+    // If opic image push is needed
+    if ($manager->imagePushNeeded()) {
+
+    }
+
+    // If images set as local needed
+    if ($manager->imageLocalNeeded()) {
+
+    }
+
+  }
+}
+
+/**
+ * Implements hook_entity_delete().
+ *
+ * Deletes the opic state from the database for this entity.
+ */
+function osu_opic_entity_delete($entity, $entity_type) {
+  if (isset($entity->{OSU_OPIC_IMAGE_FIELD})) {
+    list($id, ,) = entity_extract_ids($entity_type, $entity);
+    db_delete('osu_opic_states')
+      ->condition('eid', $id)
+      ->execute();
   }
 }
 

@@ -57,13 +57,34 @@ function osu_opic_entity_presave($entity, $entity_type) {
       $worker->saveImage($image, $entity, OSU_OPIC_IMAGE_FIELD);
     }
 
-    // If opic image push is needed
-    if ($manager->imagePushNeeded()) {
+    // If opic image push is needed.
+    elseif ($manager->imagePushNeeded()) {
 
+      // Use the opic ctools plugin to get the name.#.
+      $plugin = new OsuOpicPluginWrangler();
+      $name_n = $plugin->getNameDotNumber($entity_type, $entity, OSU_OPIC_IMAGE_FIELD);
+
+      // get the file id
+      $fid = $entity->{OSU_OPIC_IMAGE_FIELD}[LANGUAGE_NONE][0]['fid'];
+
+      // Get our image pusher worker.
+      $worker = new OsuOpicImagePusher($name_n, $fid);
+
+      // Push the image to opic.
+      $response = $worker->pushImage();
+
+      if ($response) {
+        // If we pushed successfully, we should now be synced.
+        $manager->setOpicState(OsuOpicOpicState::OPIC_SYNCED);
+      }
+      else {
+        // If a user has opted out, or already has an image, set as local.
+        $manager->setOpicState(OsuOpicOpicState::OPIC_LOCAL);
+      }
     }
 
     // If images set as local needed
-    if ($manager->imageLocalNeeded()) {
+    elseif ($manager->imageLocalNeeded()) {
 
       // Set opic state to LOCAL
       $manager->setOpicState(OsuOpicOpicState::OPIC_LOCAL);

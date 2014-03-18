@@ -11,6 +11,7 @@ features[features_api][] = api:2
 features[field_base][] = field_osu_opic
 files[] = includes/OsuOpicPluginWrangler.inc
 files[] = includes/OsuOpicImagePuller.inc
+files[] = includes/OsuOpicImagePusher.inc
 files[] = includes/OsuOpicClient.inc
 files[] = includes/OsuOpicFileState.inc
 files[] = includes/OsuOpicOpicState.inc

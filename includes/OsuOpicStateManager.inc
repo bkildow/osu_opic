@@ -80,6 +80,10 @@ class OsuOpicStateManager {
       return TRUE;
     }
 
+    if($this->fileState == OsuOpicFileState::IMAGE_EXISTS_UNCHANGED && $this->opicState == OsuOpicOpicState::OPIC_NULL) {
+      return TRUE;
+    }
+
     return FALSE;
   }
 

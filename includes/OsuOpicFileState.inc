@@ -8,11 +8,12 @@
  * Class OsuOpicFileState
  */
 class OsuOpicFileState {
-  const IMAGE_NOT_CHANGED = 1;
-  const IMAGE_NEW = 2;
-  const IMAGE_UPDATED = 3;
-  const IMAGE_DELETED = 4;
-  const IMAGE_NULL = 5;
+  const IMAGE_EMPTY_UNCHANGED = 1;
+  const IMAGE_EXISTS_UNCHANGED = 2;
+  const IMAGE_NEW = 3;
+  const IMAGE_UPDATED = 4;
+  const IMAGE_DELETED = 5;
+  const IMAGE_NULL = 6;
 
   protected $entity;
   protected $entityType;
@@ -55,8 +56,11 @@ class OsuOpicFileState {
    * Figures what the current state is and sets $this->current_state.
    */
   protected function determineCurrentState() {
-    if ($this->isNotChange()) {
-      $state = self::IMAGE_NOT_CHANGED;
+    if ($this->isEmptyUnchanged()) {
+      $state = self::IMAGE_EMPTY_UNCHANGED;
+    }
+    elseif ($this->isExistsUnchanged()) {
+      $state = self::IMAGE_EXISTS_UNCHANGED;
     }
     elseif ($this->isNew()) {
       $state = self::IMAGE_NEW;
@@ -75,12 +79,12 @@ class OsuOpicFileState {
   }
 
   /**
-   * Determines if the state is IMAGE_NOT_CHANGED.
+   * Determines if the state is IMAGE_EMPTY_UNCHANGED.
    *
    * @return bool
    *   true if it is, else returns false
    */
-  protected function isNotChange() {
+  protected function isEmptyUnchanged() {
 
     // If this is a new entity, and no image was uploaded.
     if ($this->entity->is_new && empty($this->newFid)) {
@@ -91,6 +95,17 @@ class OsuOpicFileState {
     if (empty($this->newFid) && empty($this->origFid)) {
       return TRUE;
     }
+
+    return FALSE;
+  }
+
+  /**
+   * Determines if the state is IMAGE_EXISTS_UNCHANGED.
+   *
+   * @return bool
+   *   true if it is, else returns false
+   */
+  protected function isExistsUnchanged() {
 
     // If fids match.
     if ($this->newFid == $this->origFid) {

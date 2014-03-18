@@ -45,3 +45,28 @@ function osu_opic_schema() {
 
   return $schema;
 }
+
+/**
+ * Implements hook_requirements().
+ */
+function osu_opic_requirements($phase) {
+  $requirements = array();
+
+  // Make sure we have an opic API key.
+  if ($phase == 'runtime') {
+
+    $api_key = variable_get('opic_api_key');
+
+    if (empty($api_key)) {
+
+      $requirements['osu_opic'] = array(
+        'title' => t('Opic API Key'),
+        'value' => t('Not Found'),
+        'severity' => REQUIREMENT_ERROR,
+        'description' => t("An Opic API key must be set in settings.php. E.g. \$conf['opic_api_key'] = abcxyz..."),
+      );
+    }
+  }
+
+  return $requirements;
+}

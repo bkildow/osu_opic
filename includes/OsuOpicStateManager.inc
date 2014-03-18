@@ -12,6 +12,7 @@ class OsuOpicStateManager {
   protected $os;
   protected $fileState;
   protected $opicState;
+  protected $entity;
 
   /**
    * Constructor.
@@ -30,6 +31,7 @@ class OsuOpicStateManager {
 
     $this->fileState = $this->getFileState();
     $this->opicState = $this->getOpicState();
+    $this->entity = $entity;
 
   }
 
@@ -54,13 +56,17 @@ class OsuOpicStateManager {
   }
 
   /**
-   * Delegator to set the opic state.
+   * Set the opic state, as long as this isn't a new entity.
+   *
+   * If it is new, there won't be an entity id to save, and this will fail.
    *
    * @param int $state
    *   state as defined by OsuOpicOpicState
    */
   public function setOpicState($state) {
-    $this->os->setState($state);
+    if(!$this->entity->is_new) {
+      $this->os->setState($state);
+    }
   }
 
   /**

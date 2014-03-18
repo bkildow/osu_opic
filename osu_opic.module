@@ -32,39 +32,25 @@ function osu_opic_entity_presave($entity, $entity_type) {
 
     $manager = new OsuOpicStateManager($entity_type, $entity, OSU_OPIC_IMAGE_FIELD);
 
-    // If opic image pull is needed
+    // If opic image pull is needed.
     if ($manager->imagePullNeeded()) {
 
-      $opicSaver = new OsuOpicSaver($entity_type, $entity, OSU_OPIC_IMAGE_FIELD);
-      $opicClient = new OsuOpicClient($opicSaver->name_n);
-      $response = $opicClient->get();
+      // Set opic state to SYNCED.
+      $manager->setOpicState(OsuOpicOpicState::OPIC_SYNCED);
 
-      // Short circuit if we don't get a successful response.
-      if ($response !== 200) {
+      // Get our image puller worker.
+      $worker = new OsuOpicImagePuller($entity_type, $entity, OSU_OPIC_IMAGE_FIELD);
 
-        // Set the opic state to synced to retry in the future.
-        if (!$entity->is_new) {
-          $manager->setOpicState(OsuOpicOpicState::OPIC_SYNCED);
-        }
+      // Try to get the image.
+      $image = $worker->pullImage();
 
+      // Short circuit if we didn't get an image.
+      if (!$image) {
         return;
       }
 
-      // Get the bytes of the image.
-      $fileData = $opicClient->data;
-
-      // Generate the correct file array needed for saving.
-      $file_array = $opicSaver->saveImage($fileData);
-      if (!empty($file_array)) {
-
-        // Attach it to the field to save.
-        $entity->{OSU_OPIC_IMAGE_FIELD} = $file_array;
-
-        // Set the opic state.
-        if (!$entity->is_new) {
-          $manager->setOpicState(OsuOpicOpicState::OPIC_SYNCED);
-        }
-      }
+      // Save the image to the entity.
+      $worker->saveImage($image, $entity, OSU_OPIC_IMAGE_FIELD);
     }
 
     // If opic image push is needed
@@ -75,6 +61,8 @@ function osu_opic_entity_presave($entity, $entity_type) {
     // If images set as local needed
     if ($manager->imageLocalNeeded()) {
 
+      // Set opic state to LOCAL
+      $manager->setOpicState(OsuOpicOpicState::OPIC_LOCAL);
     }
 
   }

@@ -7,28 +7,17 @@
 /**
  * Class OsuOpicImagePuller
  */
-class OsuOpicImagePuller extends OsuOpicPluginWrangler {
-  public $name_n;
-
-  protected $entity_type;
-  protected $entity;
-  protected $image_field;
+class OsuOpicImagePuller {
+  protected $name_n;
 
   /**
    * Constructor.
    *
-   * @param string $entity_type
-   *   the type of Drupal entity
-   * @param StdClass $entity
-   *   a Drupal entity object
-   * @param string $image_field
-   *   the image field which has opic settings attached
+   * @param string $name_n
+   *   name.#
    */
-  public function __construct($entity_type, $entity, $image_field) {
-    $this->entity_type = $entity_type;
-    $this->entity = $entity;
-    $this->$image_field = $image_field;
-    $this->name_n = $this->getNameDotNumber($entity_type, $entity, $image_field);
+  public function __construct($name_n) {
+    $this->name_n = $name_n;
   }
 
   /**

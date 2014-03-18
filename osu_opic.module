@@ -38,8 +38,12 @@ function osu_opic_entity_presave($entity, $entity_type) {
       // Set opic state to SYNCED.
       $manager->setOpicState(OsuOpicOpicState::OPIC_SYNCED);
 
+      // Use the opic ctools plugin to get the name.#.
+      $plugin = new OsuOpicPluginWrangler();
+      $name_n = $plugin->getNameDotNumber($entity_type, $entity, OSU_OPIC_IMAGE_FIELD);
+
       // Get our image puller worker.
-      $worker = new OsuOpicImagePuller($entity_type, $entity, OSU_OPIC_IMAGE_FIELD);
+      $worker = new OsuOpicImagePuller($name_n);
 
       // Try to get the image.
       $image = $worker->pullImage();

@@ -64,7 +64,7 @@ class OsuOpicStateManager {
    *   state as defined by OsuOpicOpicState
    */
   public function setOpicState($state) {
-    if(!$this->entity->is_new) {
+    if (!$this->entity->is_new) {
       $this->os->setState($state);
     }
   }
@@ -80,7 +80,7 @@ class OsuOpicStateManager {
       return TRUE;
     }
 
-    if($this->fileState == OsuOpicFileState::IMAGE_EXISTS_UNCHANGED && $this->opicState == OsuOpicOpicState::OPIC_NULL) {
+    if ($this->fileState == OsuOpicFileState::IMAGE_EXISTS_UNCHANGED && $this->opicState == OsuOpicOpicState::OPIC_NULL) {
       return TRUE;
     }
 

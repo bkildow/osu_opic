@@ -8,7 +8,7 @@
  * Class OsuOpicImagePuller
  */
 class OsuOpicImagePuller {
-  protected $name_n;
+  protected $nameDotNumber;
 
   /**
    * Constructor.
@@ -17,7 +17,7 @@ class OsuOpicImagePuller {
    *   name.#
    */
   public function __construct($name_n) {
-    $this->name_n = $name_n;
+    $this->nameDotNumber = $name_n;
   }
 
   /**
@@ -27,10 +27,10 @@ class OsuOpicImagePuller {
    *   the image string or false
    */
   public function pullImage() {
-    $opicClient = new OsuOpicClient($this->name_n);
-    $response = $opicClient->get();
+    $client = new OsuOpicClient($this->nameDotNumber);
+    $response = $client->get();
     if ($response == 200) {
-      return $opicClient->data;
+      return $client->data;
     }
     else {
       return FALSE;
@@ -61,14 +61,15 @@ class OsuOpicImagePuller {
    *
    * @param string $file_data
    *   the image data as returned by an opic request
+   *
    * @return array
    *   file array
    */
   protected function saveFileData($file_data) {
 
     // Make sure we have a name.#.
-    if (!empty($this->name_n)) {
-      $filename = $this->name_n . '.jpg';
+    if (!empty($this->nameDotNumber)) {
+      $filename = $this->nameDotNumber . '.jpg';
       $file = file_save_data($file_data, 'public://opic/' . $filename, FILE_EXISTS_REPLACE);
 
       // Make sure we have a file saved.

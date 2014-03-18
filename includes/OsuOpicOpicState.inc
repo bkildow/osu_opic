@@ -56,7 +56,7 @@ class OsuOpicOpicState {
 
     db_merge('osu_opic_states')
       ->key(array('entity_type' => $this->entityType, 'eid' => $this->eid))
-      ->fields(array('state' => $state))
+      ->fields(array('state' => $state, 'updated_at' => time()))
       ->execute();
   }
 

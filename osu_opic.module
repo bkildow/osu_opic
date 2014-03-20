@@ -55,6 +55,7 @@ function osu_opic_entity_presave($entity, $entity_type) {
 
       // Save the image to the entity.
       $worker->saveImage($image, $entity, OSU_OPIC_IMAGE_FIELD);
+
     }
 
     // If opic image push is needed.
@@ -81,6 +82,7 @@ function osu_opic_entity_presave($entity, $entity_type) {
         // If a user has opted out, or already has an image, set as local.
         $manager->setOpicState(OsuOpicOpicState::OPIC_LOCAL);
       }
+
     }
 
     // If images set as local needed
@@ -88,6 +90,12 @@ function osu_opic_entity_presave($entity, $entity_type) {
 
       // Set opic state to LOCAL
       $manager->setOpicState(OsuOpicOpicState::OPIC_LOCAL);
+
+    }
+    else {
+
+      // All else failed, so we have no idea what to set the state.
+      $manager->setOpicState(OsuOpicOpicState::OPIC_NULL);
     }
 
   }
@@ -160,4 +168,51 @@ function osu_opic_get_plugin_object($plugin_id) {
   }
 
   return $object_cache[$plugin_id];
+}
+
+/**
+ * Implements hook_cron_queue_info().
+ */
+function osu_opic_cron_queue_info() {
+  $queues['osu_opic'] = array(
+    'worker callback' => 'osu_opic_update_entity',
+    'time' => 60,
+    'skip on cron' => TRUE,
+  );
+  return $queues;
+}
+
+/**
+ * Queue worker callback function.
+ */
+function osu_opic_update_entity($data) {
+  // Update the entity.
+  $worker = new OsuOpicQueueWorker();
+  $worker->updateEntity($data);
+}
+
+/**
+ * Implements hook_cron().
+ *
+ * We are using our own queueing logic, instead of drupal_cron_run()'s to get
+ * better logging.
+ */
+function osu_opic_cron() {
+
+  $queue = DrupalQueue::get('osu_opic');
+  $worker = new OsuOpicQueueWorker();
+
+  // Only repopulate the queue when we don't have anything in it.
+  if ($queue->numberOfItems() == 0) {
+
+    // Get items.
+    $items = $worker->getItems();
+
+    foreach ($items as $item) {
+      $queue->createItem($item);
+    }
+  }
+
+  // Use our own queue processor.
+  $worker->processQueue();
 }

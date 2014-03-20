@@ -17,5 +17,6 @@ files[] = includes/OsuOpicFileState.inc
 files[] = includes/OsuOpicOpicState.inc
 files[] = includes/OsuOpicStateManager.inc
 files[] = includes/OsuOpicFieldSettings.inc
+files[] = includes/OsuOpicQueueWorker.inc
 files[] = plugins/opic/abstract.inc
 files[] = plugins/opic/broken.inc

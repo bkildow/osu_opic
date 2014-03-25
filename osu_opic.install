@@ -70,3 +70,13 @@ function osu_opic_requirements($phase) {
 
   return $requirements;
 }
+
+/**
+ * Implements hook_install().
+ *
+ * Creates an opic directory in files, if one doesn't exist already.
+ */
+function osu_opic_install() {
+  $path = 'public://opic';
+  file_prepare_directory($path, FILE_CREATE_DIRECTORY);
+}

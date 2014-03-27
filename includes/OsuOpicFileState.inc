@@ -197,7 +197,7 @@ class OsuOpicFileState {
    * If there is not an original entity, NULL will be set.
    */
   protected function setOrigFid() {
-    if (isset($this->entity->original)) {
+    if (isset($this->entity->original) && !empty($this->entity->original)) {
       $orig_fid = $this->getFidFromEntity($this->entity->original);
     }
     else {

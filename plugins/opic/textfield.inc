@@ -10,6 +10,7 @@ $plugin = array(
   'title' => t('Textfield Provider'),
   'description' => t('A plugin to provide a name.# from a textfield'),
   'class' => 'OsuOpicTextfield',
+  'file' => 'textfield.inc',
 );
 
 class OsuOpicTextfield implements OsuOpicNameNumProviderInterface {

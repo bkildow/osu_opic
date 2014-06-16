@@ -37,7 +37,7 @@ class OsuOpicImagePusher {
 
     // Short circuit if this image doesn't exist for some reason.
     if (!is_file($this->imagePath)) {
-      watchdog('osu_opic', 'Image does not exist on the node for name.#: ' . $this->nameDotNumber);
+      watchdog('osu_opic', 'Image path: ' . $this->imagePath . ' does not exist on the node with name.#: ' . $this->nameDotNumber);
       return FALSE;
     }
 
@@ -79,7 +79,12 @@ class OsuOpicImagePusher {
     $file = file_load($fid);
     if ($file) {
       $real_path = drupal_realpath($file->uri);
-      $path = str_replace($_SERVER['DOCUMENT_ROOT'] . '/', '', $real_path);
+      if (!empty($_SERVER['DOCUMENT_ROOT'])) {
+        $path = str_replace($_SERVER['DOCUMENT_ROOT'] . '/', '', $real_path);
+      }
+      else {
+        $path = $real_path;
+      }
       return $path;
     }
     else {

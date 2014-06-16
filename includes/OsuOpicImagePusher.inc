@@ -37,6 +37,7 @@ class OsuOpicImagePusher {
 
     // Short circuit if this image doesn't exist for some reason.
     if (!is_file($this->imagePath)) {
+      watchdog('osu_opic', 'Image does not exist on the node for name.#: ' . $this->nameDotNumber);
       return FALSE;
     }
 
@@ -47,6 +48,7 @@ class OsuOpicImagePusher {
 
     // If so, skip pushing this image.
     if ($get_http_code == 200) {
+      watchdog('osu_opic', $this->nameDotNumber . ' already has an image in opic. The local image will be used.');
       return FALSE;
     }
 
@@ -58,6 +60,7 @@ class OsuOpicImagePusher {
       return TRUE;
     }
     else {
+      watchdog('osu_opic', 'Pushing image failed for ' . $this->nameDotNumber . ' with http status code: ' . $post_http_code);
       return FALSE;
     }
 

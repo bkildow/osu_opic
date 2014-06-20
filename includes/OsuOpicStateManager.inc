@@ -76,11 +76,16 @@ class OsuOpicStateManager {
    *   true if this is needed
    */
   public function imagePushNeeded() {
+
     if ($this->fileState == OsuOpicFileState::IMAGE_NEW && $this->opicState !== OsuOpicOpicState::OPIC_LOCAL) {
       return TRUE;
     }
 
     if ($this->fileState == OsuOpicFileState::IMAGE_EXISTS_UNCHANGED && $this->opicState == OsuOpicOpicState::OPIC_NULL) {
+      return TRUE;
+    }
+
+    if ($this->fileState == OsuOpicFileState::IMAGE_UPDATED && $this->opicState !== OsuOpicOpicState::OPIC_LOCAL) {
       return TRUE;
     }
 
@@ -115,6 +120,10 @@ class OsuOpicStateManager {
    */
   public function imageLocalNeeded() {
     if ($this->opicState == OsuOpicOpicState::OPIC_LOCAL && $this->fileState !== OsuOpicFileState::IMAGE_DELETED) {
+      return TRUE;
+    }
+
+    if ($this->opicState == OsuOpicOpicState::OPIC_LOCAL && $this->fileState == OsuOpicFileState::IMAGE_UPDATED) {
       return TRUE;
     }
 

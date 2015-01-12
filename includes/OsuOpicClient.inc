@@ -48,6 +48,11 @@ class OsuOpicClient {
     $url = $this->baseUrl . '/' . $this->nameDotNumber . '?aspect=p&width=500';
     $response = drupal_http_request($url);
 
+    // Record any errors.
+    if ($response->code === 0) {
+      watchdog('osu_opic', 'OPIC HTTP fetch Error: ' . $response->error);
+    }
+
     // If we were redirected, it means the person doesn't have a pic.
     if (!empty($response->redirect_code)) {
       $this->code = $response->redirect_code;

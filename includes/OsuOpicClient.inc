@@ -50,7 +50,7 @@ class OsuOpicClient {
 
     // Record any errors.
     if ($response->code === 0) {
-      watchdog('osu_opic', 'OPIC HTTP fetch Error: ' . $response->error);
+      watchdog('osu_opic', 'OPIC HTTP GET Error: ' . $response->error);
     }
 
     // If we were redirected, it means the person doesn't have a pic.
@@ -99,6 +99,12 @@ class OsuOpicClient {
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
     $result = curl_exec($ch);
+
+    // Log errors.
+    if (curl_errno($ch)) {
+      watchdog('osu_opic', 'OPIC HTTP POST Error: ' . curl_error($ch));
+    }
+
     $this->code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 

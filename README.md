@@ -13,7 +13,7 @@ it like so:
 
 If you are using an image field that is named something other than 
 `field_osu_opic`, you can set the field machine name via drush. E.g.
-`drush vset osu_opic_image_field <FIELD_NAME>`
+`drush vset osu_opic_image_field <FIELD_NAME>`.
 
 Next, when you add this field to a content type, make sure you configure the
 opic settings on the field. This setting lets you choose an Opic Field plugin,
@@ -22,6 +22,10 @@ osu_opic comes with a text field plugin which knows how to read name.#'s from
 regular text fields. This is implemented as a custom CTools plugin, and can
 easily be extended to add other field types which may include a name.# (like
 an entityreference field for example).
+
+Note: If using the kmdata plugin for name.# it defaults to the machine name:
+`field_osu_km_person`. This can be changed via drush if needed. E.g.
+`drush vset osu_opic_name_n_field <FIELD_NAME>`.
 
 ## Behavior
 

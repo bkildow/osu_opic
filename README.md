@@ -11,6 +11,10 @@ it like so:
 
 `$conf['opic_api_key'] = 'abc123';`
 
+If you are using an image field that is named something other than 
+`field_osu_opic`, you can set the field machine name via drush. E.g.
+`drush vset osu_opic_image_field <FIELD_NAME>`
+
 Next, when you add this field to a content type, make sure you configure the
 opic settings on the field. This setting lets you choose an Opic Field plugin,
 which is basically tells the opic field how to get a name.#. Currently,

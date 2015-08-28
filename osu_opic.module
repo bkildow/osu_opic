@@ -1,6 +1,6 @@
 <?php
 
-define('OSU_OPIC_IMAGE_FIELD', 'field_osu_opic');
+define('OSU_OPIC_IMAGE_FIELD', variable_get('osu_opic_image_field', 'field_osu_opic'));
 
 /**
  * Implements hook_ctools_plugin_type().

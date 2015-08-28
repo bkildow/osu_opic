@@ -54,7 +54,8 @@ class OsuOpicPluginWrangler {
    *   a name.#
    */
   public function getNameDotNumber($entity_type, $entity, $image_field) {
-    $info = field_info_instance($entity_type, $image_field, $entity->type);
+    $bundle = $entity_type == 'user' ? $entity_type : $entity->type;
+    $info = field_info_instance($entity_type, $image_field, $bundle);
     return $this->getNameDotNumberFromPlugin($entity_type, $entity, $info);
   }
 
